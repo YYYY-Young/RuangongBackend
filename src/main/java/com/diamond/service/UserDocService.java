@@ -49,6 +49,14 @@ public class UserDocService {
         }
         return userDocs;
     }
+    public List<UserDoc> findByDelete(int uid){
+        List<UserDoc> userDocs=userDocDAO.finddeleterecords(uid);
+        for (UserDoc userDoc : userDocs) {
+            userDoc.setDoc(docDAO.findById(userDoc.getDocid()));
+        }
+        return userDocs;
+
+    }
     public List<UserDoc> findByEdit(int uid){
         List<UserDoc> userDocs=userDocDAO.findeditrecords(uid);
         Iterator<UserDoc> iterator =userDocs.iterator();
@@ -76,19 +84,6 @@ public class UserDocService {
         }
         return userDocs;
     }
-    public List<UserDoc> findByComment(int uid){
-        List<UserDoc> userDocs=userDocDAO.findcommentrecords(uid);
-        Iterator<UserDoc> iterator =userDocs.iterator();
-        while(iterator.hasNext()){
-            UserDoc userDoc=iterator.next();
-            if(docDAO.findnotdeletedocs(userDoc.getDocid())==null){
-                iterator.remove();
-                continue;
-            }
-            userDoc.setDoc(docDAO.findById(userDoc.getDocid()));
-        }
-        return userDocs;
-    }
     public int finddoclikes(int docid){
         return userDocDAO.findlikes(docid);
     }
@@ -104,5 +99,8 @@ public class UserDocService {
             userDoc.setDoc(docDAO.findById(userDoc.getDocid()));
         }
         return userDocs;
+    }
+    public UserDoc islike(int uid,int docid){
+        return userDocDAO.islike(uid,docid);
     }
 }

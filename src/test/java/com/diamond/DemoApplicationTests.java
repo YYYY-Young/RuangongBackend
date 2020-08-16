@@ -34,10 +34,7 @@ class DemoApplicationTests {
     private CommentDAO commentDAO;
     @Test
     public void contextLoads() {
-//        System.out.println(commentDAO.findAllByDocidOrderByTimeDesc(1));
-        System.out.println(commentDAO.findAllByUidOrderByTimeDesc(1));
-
-
+        userDocDAO.deletedeleterecords(1);
     }
 
 

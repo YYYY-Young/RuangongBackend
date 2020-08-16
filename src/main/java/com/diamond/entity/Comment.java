@@ -25,16 +25,12 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @NotNull(message = "id 不能为 null")
     private int id;
-    @NotNull(message = "文档id不能为空")
     private int docid;
     @Transient
     private Doc doc;
-    @NotNull(message = "评论者id不能为空")
     private int uid;
-    @NotNull(message = "评价内容不能为空")
+
     private String des;
-    @NotNull(message = "评价时间不能为空")
     private Timestamp time;
 }

@@ -76,6 +76,13 @@ public class DocService {
             return 0;
         }
         if (!doc.isDoc_recycle()) {
+            UserDoc userDoc = new UserDoc();
+            userDoc.setUid(uid);
+            userDoc.setDocid(id);
+            userDoc.setDoc_delete(true);
+            java.sql.Timestamp ctime = new java.sql.Timestamp(new java.util.Date().getTime());
+            userDoc.setDoc_open_time(ctime);
+            userDocDAO.save(userDoc);
             docDAO.put_in_recycle_bin(id);
             return 1;
         } else {
@@ -84,7 +91,7 @@ public class DocService {
         }
         return 2;
     }
-
+@Transactional
     public void resume(int uid,int id) {
         Doc doc = docDAO.findById(id);
         int tid = doc.getDoc_team();
@@ -92,6 +99,8 @@ public class DocService {
             return ;
         }
         docDAO.take_out_recycle_bin(id);
+        userDocDAO.deletedeleterecords(id);
+
     }
 
     public int share(int fromuid, int touid, int docid, String msg) {
@@ -114,11 +123,9 @@ public class DocService {
 
     public List<Doc> findtrash(int uid) {
         List<Doc> docs = new ArrayList<>();
-        List<UserDoc> userDocs = userDocService.findByRead(uid);
-        for (UserDoc tempuserdoc : userDocs) {
-            Doc doctemp = docDAO.findalreadydeletedocs(tempuserdoc.getDocid());
-            if (doctemp != null)
-                docs.add(doctemp);
+        List<UserDoc> userDocs = userDocService.findByDelete(uid);
+        for(UserDoc userDoc:userDocs){
+            docs.add(docDAO.findById(userDoc.getDocid()));
         }
         Set<Doc> userSet = new HashSet<>(docs);
         List<Doc> list = new ArrayList<>(userSet);
@@ -129,6 +136,9 @@ public class DocService {
 
         docs.removeIf(doc -> doc.getDoc_founder() != uid && (!doc.isDoc_read() || (doc.isDoc_only_team() && !userTeamService.isTeammember(uid, tid))));
         return docs;
+    }
+    public List<Doc> findfouneddocs(int uid){
+        return docDAO.findfounderdocs(uid);
     }
 //    public List<Doc> findbyuidedit(int uid){
 //        List<Doc> docs = new ArrayList<>();

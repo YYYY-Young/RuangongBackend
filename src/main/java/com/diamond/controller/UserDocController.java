@@ -9,7 +9,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.Doc;
 import javax.validation.Valid;
+import java.util.Objects;
 
 /**
  * @Classname UserDocController
@@ -32,10 +34,6 @@ public class UserDocController {
     public Result getDocsEditByuid(@PathVariable("uid") int uid){
         return ResultFactory.buildSuccessResult(userDocService.findByEdit(uid));
     }
-    @GetMapping("api/doc/list/comment/{uid}")
-    public Result getDocsCommentByuid(@PathVariable("uid") int uid){
-        return ResultFactory.buildSuccessResult(userDocService.findByComment(uid));
-    }
     @GetMapping("api/doc/list/share/{uid}")
     public Result getDocsShareByuid(@PathVariable("uid") int uid){
         return ResultFactory.buildSuccessResult(userDocService.findByShare(uid));
@@ -47,6 +45,11 @@ public class UserDocController {
     @GetMapping("api/doc/list/likes/{uid}")
     public  Result getUserDocLikes(@PathVariable("uid") int uid){
         return ResultFactory.buildSuccessResult(userDocService.finduserlikes(uid));
+    }
+    @GetMapping("api/doc/islike/{uid}/{docid}")
+    public Result islike(@PathVariable("uid") int uid,@PathVariable("docid") int docid){
+        UserDoc userDoc=userDocService.islike(uid,docid);
+        return ResultFactory.buildSuccessResult(Objects.requireNonNullElse(userDoc, "没有收藏记录"));
     }
     @PostMapping("api/doc/editrecord")
     public Result editRecord(@RequestBody @Valid UserDoc userDoc){

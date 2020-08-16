@@ -62,13 +62,14 @@ public class DocController {
 //    }
     @DeleteMapping("/api/doc/deleteone/{id}/{uid}")
     public Result deleteDoc(@PathVariable("id") int id, @PathVariable("uid") int uid) {
-        if (docService.delete(uid, id) == 1) {
+        int re=docService.delete(uid, id);
+        if (re == 1) {
             return ResultFactory.buildSuccessResult("成功将文件放入回收站");
         }
-        if (docService.delete(uid, id) == 2) {
-            return ResultFactory.buildFailResult("成功永久删除文件");
+        if (re == 2) {
+            return ResultFactory.buildSuccessResult("成功永久删除文件");
         }
-        if (docService.delete(uid, id) == 0) {
+        if (re == 0) {
             return ResultFactory.buildFailResult("没有权限删除文件");
         }
         return ResultFactory.buildFailResult("未知错误");
@@ -88,7 +89,7 @@ public class DocController {
     }
 
     @ApiOperation(value = "恢复文件", notes = "传入需要恢复文件的文件id", httpMethod = "GET")
-    @GetMapping("/api/notrash/{uid}/{docid}")
+    @DeleteMapping("/api/notrash/{uid}/{docid}")
     public Result restore(@PathVariable ("uid")int uid, @PathVariable ("docid")int docid) {
         docService.resume(uid, docid);
         return ResultFactory.buildSuccessResult("成功恢复文件");
@@ -101,6 +102,10 @@ public class DocController {
     @GetMapping("api/doc/teamdocs/{uid}/{tid}")
     public Result teamdocs(@PathVariable ("uid")int uid,@PathVariable ("tid") int tid){
         return ResultFactory.buildSuccessResult(docService.findteamdocs(uid,tid));
+    }
+    @GetMapping("/api/doc/founder/{uid}")
+    public Result founderdocs(@PathVariable("uid") int uid){
+        return ResultFactory.buildSuccessResult(docService.findfouneddocs(uid));
     }
 
 }
