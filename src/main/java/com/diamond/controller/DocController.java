@@ -37,8 +37,9 @@ public class DocController {
 
     @GetMapping("/api/doc/getone/{id}/{uid}")
     public Result getOneDoc(@PathVariable("id") int id, @PathVariable("uid") int uid) {
-        if (docService.findById(uid, id) != null) {
-            return ResultFactory.buildSuccessResult(docService.findById(uid, id));
+        Doc doc=docService.findById(uid,id);
+        if (doc != null) {
+            return ResultFactory.buildSuccessResult(doc);
         } else {
             return ResultFactory.buildFailResult("没有权限查看");
         }

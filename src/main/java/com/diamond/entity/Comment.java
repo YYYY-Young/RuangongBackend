@@ -29,6 +29,8 @@ public class Comment {
     private int id;
     @NotNull(message = "文档id不能为空")
     private int docid;
+    @Transient
+    private Doc doc;
     @NotNull(message = "评论者id不能为空")
     private int uid;
     @NotNull(message = "评价内容不能为空")

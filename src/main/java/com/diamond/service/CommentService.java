@@ -26,13 +26,24 @@ public class CommentService {
     UserTeamService userTeamService;
 
     public Comment findById(int id) {
-        return commentDao.findById(id);
+        Comment comment= commentDao.findById(id);
+        comment.setDoc(docDAO.findById(comment.getDocid()));
+        return comment;
     }
     public List<Comment> getCommentbyuid(int uid){
-        return commentDao.findAllByUidOrderByTimeDesc(uid);
+
+          List<Comment> comments=commentDao.findAllByUidOrderByTimeDesc(uid);
+          for(Comment comment:comments){
+              comment.setDoc(docDAO.findById(comment.getDocid()));
+          }
+          return comments;
     }
     public List<Comment> getCommentbydocid(int docid){
-        return commentDao.findAllByDocidOrderByTimeDesc(docid);
+        List<Comment> comments= commentDao.findAllByDocidOrderByTimeDesc(docid);
+        for(Comment comment:comments){
+            comment.setDoc(docDAO.findById(comment.getDocid()));
+        }
+        return comments;
     }
 
     public int addOrUpdate(Comment comment) {
