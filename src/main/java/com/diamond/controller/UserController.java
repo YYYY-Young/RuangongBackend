@@ -4,6 +4,7 @@ import com.diamond.entity.User;
 import com.diamond.result.Result;
 import com.diamond.result.ResultFactory;
 import com.diamond.service.UserService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
  * @Date 2020/8/10 15:30
  * @Created by lrf
  */
+@Api(tags = "用户管理类接口")
 @RestController
 public class UserController {
     @Autowired

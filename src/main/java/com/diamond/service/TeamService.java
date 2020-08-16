@@ -1,8 +1,10 @@
 package com.diamond.service;
 
 import com.diamond.dao.TeamDAO;
+import com.diamond.entity.Team;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Classname TeamService
@@ -14,4 +16,9 @@ import org.springframework.stereotype.Service;
 public class TeamService {
     @Autowired
     TeamDAO teamDAO;
+    @Transactional
+    public void  editTeam(Team team){
+        teamDAO.save(team);
+
+    }
 }

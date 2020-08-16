@@ -1,5 +1,6 @@
 package com.diamond;
 
+import com.diamond.dao.CommentDAO;
 import com.diamond.dao.DocDAO;
 import com.diamond.dao.UserDocDAO;
 import com.diamond.entity.Doc;
@@ -29,9 +30,12 @@ class DemoApplicationTests {
     private DocDAO docDAO;
     @Autowired
     private UserDocDAO userDocDAO;
+    @Autowired
+    private CommentDAO commentDAO;
     @Test
     public void contextLoads() {
-        System.out.println( docDAO.findnotdeletedocs(1));
+//        System.out.println(commentDAO.findAllByDocidOrderByTimeDesc(1));
+        System.out.println(commentDAO.findAllByUidOrderByTimeDesc(1));
 
 
     }

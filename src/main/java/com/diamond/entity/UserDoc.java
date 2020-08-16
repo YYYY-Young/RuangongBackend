@@ -28,6 +28,8 @@ public class UserDoc {
     private int uid;
 
     private int docid;
+    @Transient
+    private Doc doc;
 
     private boolean doc_read;
 
@@ -38,8 +40,14 @@ public class UserDoc {
     private boolean doc_comment;
 
     private int commentid;
+    @Transient
+    Comment comment;
 
     private boolean doc_share;
+
+    private int doc_share_uid;
+    @Transient
+    private User doc_share_user;
 
     private boolean doc_like;
 

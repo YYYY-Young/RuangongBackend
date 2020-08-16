@@ -13,5 +13,7 @@ import java.util.List;
  * @Created by lrf
  */
 public interface TeamDAO extends JpaRepository<Team,Integer> {
+    Team findById(int id);
+    void deleteById(int id);
 
 }

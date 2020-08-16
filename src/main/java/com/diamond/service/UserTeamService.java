@@ -28,13 +28,13 @@ public class UserTeamService {
         return userTeamDAO.findAllByUid(uid);
     }
     @Transactional
-    public void saveUserChanges(int tid,List<User> users){
+    public void initmembers(int tid,List<UserTeam> users){
         userTeamDAO.deleteAllByTid(tid);
         List<UserTeam> userTeamList =new ArrayList<>();
         users.forEach(r->{
             UserTeam ut=new UserTeam();
             ut.setTid(tid);
-            ut.setUid(r.getId());
+            ut.setUid(r.getUid());
             userTeamList.add(ut);
         });
         userTeamDAO.saveAll(userTeamList);
