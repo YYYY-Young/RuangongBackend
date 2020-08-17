@@ -39,7 +39,7 @@ public class Doc {
 
     private String doc_cover;
 
-    private Date doc_found_date;
+    private Timestamp doc_found_date;
 
     private int doc_founder;
     private int doc_team;

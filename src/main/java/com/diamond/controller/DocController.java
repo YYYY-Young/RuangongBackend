@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * @Classname DocController
@@ -105,7 +104,19 @@ public class DocController {
     }
     @GetMapping("/api/doc/founder/{uid}")
     public Result founderdocs(@PathVariable("uid") int uid){
-        return ResultFactory.buildSuccessResult(docService.findfouneddocs(uid));
+        return ResultFactory.buildSuccessResult(docService.findfoundeddocs(uid));
+    }
+    @GetMapping("/api/doc/search/title/{uid}/{keyword}")
+    public Result finddocsbytitle(@PathVariable("uid") int uid,@PathVariable("keyword") String keyword){
+        return ResultFactory.buildSuccessResult(docService.finddocsbytitle(uid,keyword));
+    }
+    @GetMapping("/api/doc/search/author/{uid}/{keyword}")
+    public Result finddocsbyauthor(@PathVariable("uid") int uid,@PathVariable("keyword") String keyword){
+        return ResultFactory.buildSuccessResult(docService.finddocsbyauthor(uid,keyword));
+    }
+    @GetMapping("/api/doc/search/content/{uid}/{keyword}")
+    public Result finddocsbycontent(@PathVariable("uid") int uid,@PathVariable("keyword") String keyword){
+        return ResultFactory.buildSuccessResult(docService.finddocsbycontent(uid,keyword));
     }
 
 }

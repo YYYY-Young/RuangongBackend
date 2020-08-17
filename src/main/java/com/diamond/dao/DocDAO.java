@@ -33,4 +33,7 @@ public interface DocDAO extends JpaRepository<Doc,Integer> {
     int take_out_recycle_bin(int id);
     @Query(value = "select * from doc where doc_founder=?1",nativeQuery = true)
     List<Doc> findfounderdocs(int uid);
+
+    @Query(value  ="select * from doc where doc_recycle=0",nativeQuery = true)
+    List<Doc> findalldocs();
 }

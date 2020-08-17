@@ -25,7 +25,6 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
-    @NotEmpty(message = "The team name should not be empty")
     private String teamname;
     private String des;
     private int leaderid;

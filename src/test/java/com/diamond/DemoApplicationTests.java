@@ -34,7 +34,7 @@ class DemoApplicationTests {
     private CommentDAO commentDAO;
     @Test
     public void contextLoads() {
-        userDocDAO.deletedeleterecords(1);
+        System.out.println(docService.finddocsbycontent(1,"ha"));
     }
 
 

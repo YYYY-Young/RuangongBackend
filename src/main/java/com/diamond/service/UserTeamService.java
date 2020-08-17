@@ -1,5 +1,7 @@
 package com.diamond.service;
 
+import com.diamond.dao.TeamDAO;
+import com.diamond.dao.UserDAO;
 import com.diamond.dao.UserTeamDAO;
 import com.diamond.entity.Team;
 import com.diamond.entity.User;
@@ -21,11 +23,26 @@ import java.util.List;
 public class UserTeamService {
     @Autowired
     UserTeamDAO userTeamDAO;
+    @Autowired
+    TeamDAO teamDAO;
+    @Autowired
+    UserDAO userDAO;
     public List<UserTeam> listAllByTid(int tid){
-        return userTeamDAO.findAllByTid(tid);
+        List<UserTeam> userTeamList= userTeamDAO.findAllByTid(tid);
+        for(UserTeam userTeam:userTeamList){
+            userTeam.setTeam(teamDAO.findById(userTeam.getTid()));
+            userTeam.setUser(userDAO.findById(userTeam.getUid()));
+        }
+        return userTeamList;
     }
     public List<UserTeam> listAllByUid(int uid){
-        return userTeamDAO.findAllByUid(uid);
+
+        List<UserTeam> userTeamList= userTeamDAO.findAllByUid(uid);
+        for(UserTeam userTeam:userTeamList){
+            userTeam.setTeam(teamDAO.findById(userTeam.getTid()));
+            userTeam.setUser(userDAO.findById(userTeam.getUid()));
+        }
+        return userTeamList;
     }
     @Transactional
     public void initmembers(int tid,List<UserTeam> users){
@@ -44,6 +61,9 @@ public class UserTeamService {
     }
     public UserTeam  findByUidAndTid(int uid,int tid){
         UserTeam userTeam=userTeamDAO.findByUidAndTid(uid,tid);
+        if(userTeam!=null){
+            userTeam.setTeam(teamDAO.findById(userTeam.getTid()));
+        }
         return userTeam;
     }
     public void deleteUserTeam(UserTeam userTeam){

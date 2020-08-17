@@ -24,6 +24,9 @@ public class UserTeam {
     private int id;
 
     private int uid;
-
+    @Transient
+    private User user;
     private int tid;
+    @Transient
+    private Team team;
 }

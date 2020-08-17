@@ -1,13 +1,17 @@
 package com.diamond.service;
 
 import com.diamond.dao.DocDAO;
+import com.diamond.dao.UserDAO;
 import com.diamond.dao.UserDocDAO;
 import com.diamond.entity.Doc;
+import com.diamond.entity.User;
 import com.diamond.entity.UserDoc;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -26,6 +30,8 @@ public class DocService {
     UserDocDAO userDocDAO;
     @Autowired
     UserDocService userDocService;
+    @Autowired
+    UserDAO userDAO;
 
     public Doc findById(int uid, int id) {
         Doc doc;
@@ -137,46 +143,63 @@ public class DocService {
         docs.removeIf(doc -> doc.getDoc_founder() != uid && (!doc.isDoc_read() || (doc.isDoc_only_team() && !userTeamService.isTeammember(uid, tid))));
         return docs;
     }
-    public List<Doc> findfouneddocs(int uid){
+    public List<Doc> findfoundeddocs(int uid){
         return docDAO.findfounderdocs(uid);
     }
-//    public List<Doc> findbyuidedit(int uid){
-//        List<Doc> docs = new ArrayList<>();
-//        List<UserDoc> userDocs = userDocService.findByEdit(uid);
-//        for (UserDoc tempuserdoc : userDocs) {
-//            Doc doctemp = docDAO.findnotdeletedocs(tempuserdoc.getDocid());
-//            if (doctemp != null)
-//                docs.add(doctemp);
-//        }
-//        Set<Doc> userSet = new HashSet<>(docs);
-//        List<Doc> list = new ArrayList<>(userSet);
-//        return list;
-//    }
-//    public List<Doc> findbyuidlike(int uid){
-//        List<Doc> docs = new ArrayList<>();
-//        List<UserDoc> userDocs = userDocService.finduserlikes(uid);
-//        for (UserDoc tempuserdoc : userDocs) {
-//            Doc doctemp = docDAO.findnotdeletedocs(tempuserdoc.getDocid());
-//            if (doctemp != null)
-//                docs.add(doctemp);
-//        }
-//        Set<Doc> userSet = new HashSet<>(docs);
-//        List<Doc> list = new ArrayList<>(userSet);
-//        return list;
-//
-//    }
-//    public List<Doc> findbyuidcomment(int uid){
-//        List<Doc> docs = new ArrayList<>();
-//        List<UserDoc> userDocs = userDocService.findByComment(uid);
-//        for (UserDoc tempuserdoc : userDocs) {
-//            Doc doctemp = docDAO.findnotdeletedocs(tempuserdoc.getDocid());
-//            if (doctemp != null)
-//                docs.add(doctemp);
-//        }
-//        Set<Doc> userSet = new HashSet<>(docs);
-//        List<Doc> list = new ArrayList<>(userSet);
-//        return list;
-//    }
+
+    public List<Doc> finddocsbytitle(int uid,String keyword){
+        List<Doc> docs=docDAO.findalldocs();
+        List<Doc> re =new ArrayList<>();
+        for(Doc doc:docs){
+            int tid=doc.getDoc_team();
+            if (doc.getDoc_founder() != uid && (!doc.isDoc_read() || (doc.isDoc_only_team() && !userTeamService.isTeammember(uid, tid)))) {
+                continue;
+            }
+            String title=doc.getDoc_title();
+            int temp=title.indexOf(keyword);
+            if(temp!=-1){
+                re.add(doc);
+            }
+        }
+        return re;
+    }
+
+    public List<Doc> finddocsbyauthor(int uid,String keyword){
+        List<Doc> docs=docDAO.findalldocs();
+        List<Doc> re =new ArrayList<>();
+        for(Doc doc:docs){
+            int tid=doc.getDoc_team();
+            if (doc.getDoc_founder() != uid && (!doc.isDoc_read() || (doc.isDoc_only_team() && !userTeamService.isTeammember(uid, tid)))) {
+                continue;
+            }
+            int author=doc.getDoc_founder();
+            User founder= userDAO.findById(author);
+            String authorname=founder.getUsername();
+            int temp=authorname.indexOf(keyword);
+            if(temp!=-1){
+                re.add(doc);
+            }
+        }
+        return re;
+    }
+    public List<Doc> finddocsbycontent(int uid,String keyword){
+        List<Doc> docs=docDAO.findalldocs();
+        List<Doc> re =new ArrayList<>();
+        for(Doc doc:docs){
+            int tid=doc.getDoc_team();
+            if (doc.getDoc_founder() != uid && (!doc.isDoc_read() || (doc.isDoc_only_team() && !userTeamService.isTeammember(uid, tid)))) {
+                continue;
+            }
+            String content=doc.getDoc_content_md();
+            int temp=content.indexOf(keyword);
+            if(temp!=-1){
+                re.add(doc);
+            }
+        }
+        return re;
+    }
+
+
 
 
 
