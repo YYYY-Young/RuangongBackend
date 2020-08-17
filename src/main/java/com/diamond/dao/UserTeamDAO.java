@@ -6,6 +6,7 @@ import com.diamond.entity.UserTeam;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,9 +21,15 @@ public interface UserTeamDAO extends JpaRepository<UserTeam,Integer> {
     List<UserTeam> findAllByTid(int tid);
 //    @Modifying
 //    @Query("delete from Customer where id = ?1")
+    @Transactional
+    @Modifying
     void deleteByUidAndTid(int uid,int tid);
+    @Transactional
+    @Modifying
     void deleteAllByTid(int tid);
     UserTeam findByUidAndTid(int uid,int tid);
+    @Transactional
+    @Modifying
     void deleteById(int id);
 
 }

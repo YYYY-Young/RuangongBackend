@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.sql.Timestamp;
 
 /**
  * @Classname Team
@@ -28,4 +29,5 @@ public class Team {
     private String teamname;
     private String des;
     private int leaderid;
+    private Timestamp time;
 }

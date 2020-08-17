@@ -27,12 +27,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
-    @NotEmpty(message = "The user name should not be empty")
     private String username;
     private String password;
     private String salt;
     private String phone;
-    @Email(message="please enter the right email adress")
     private String email;
     private boolean enabled;
     private String code;

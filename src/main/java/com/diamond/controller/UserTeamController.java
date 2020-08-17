@@ -1,6 +1,7 @@
 package com.diamond.controller;
 
 import com.diamond.entity.Doc;
+import com.diamond.entity.Team;
 import com.diamond.entity.User;
 import com.diamond.entity.UserTeam;
 import com.diamond.result.Result;
@@ -28,6 +29,8 @@ public class UserTeamController {
     UserTeamService userTeamService;
     @Autowired
     DocService docService;
+    @Autowired
+    TeamService teamService;
     @GetMapping("/api/team/findteams/{uid}")
     public Result listUsers(@PathVariable("uid") int uid){
         return ResultFactory.buildSuccessResult(userTeamService.listAllByUid(uid));
@@ -41,15 +44,21 @@ public class UserTeamController {
         userTeamService.addOrUpdate(userTeam);
         return ResultFactory.buildSuccessResult("修改成功");
     }
-    @PostMapping("api/team/init")
-    public Result initteam(@RequestBody @Valid List<UserTeam> users){
-        UserTeam userTeam=users.get(0);
-        userTeamService.initmembers(userTeam.getTid(),users);
+    @PostMapping("api/team/resetmembers")
+    public Result initteammembers(@RequestBody @Valid List<UserTeam> userTeamList){
+        UserTeam userTeam=userTeamList.get(0);
+        userTeamService.initmembers(userTeam.getTid(),userTeamList);
         return ResultFactory.buildSuccessResult("已删除原有记录并批量添加");
     }
-    @PostMapping("/api/admin/team/deleteuser")
-    public Result deleteUser(@RequestBody @Valid UserTeam userteam){
-        userTeamService.deleteUserTeam(userteam);
+    @DeleteMapping("/api/team/deleteuser/{id}")
+    public Result deleteUser(@PathVariable("id") int id){
+        userTeamService.deleteUserTeam(id);
         return ResultFactory.buildSuccessResult("删除成功");
     }
+    @PostMapping("/api/team/initteam")
+    public Result initteam(@RequestBody @Valid Team team){
+        teamService.initTeam(team);
+        return ResultFactory.buildSuccessResult("创建成功");
+    }
+
 }

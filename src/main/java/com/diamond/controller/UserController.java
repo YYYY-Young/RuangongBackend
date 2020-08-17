@@ -22,28 +22,28 @@ import javax.validation.Valid;
 public class UserController {
     @Autowired
     UserService userService;
-    @GetMapping("/api/admin/user")
+    @GetMapping("/api/user")
     public Result listUsers() {
         return ResultFactory.buildSuccessResult(userService.userList());
     }
-    @PutMapping("/api/admin/user/status")
+    @PutMapping("/api/user/status")
     public Result updateUserStatus(@RequestBody @Valid User requestUser) {
         userService.updateUserStatus(requestUser);
         return ResultFactory.buildSuccessResult("用户状态更新成功");
     }
 
-    @PutMapping("/api/admin/user/password")
+    @PutMapping("/api/user/password")
     public Result resetPassword(@RequestBody @Valid User requestUser) {
         userService.resetPassword(requestUser);
         return ResultFactory.buildSuccessResult("重置密码成功");
     }
 
-    @PutMapping("/api/admin/user")
+    @PutMapping("/api/user")
     public Result editUser(@RequestBody @Valid User requestUser) {
         userService.editUser(requestUser);
         return ResultFactory.buildSuccessResult("修改用户信息成功");
     }
-    @GetMapping("/api/admin/getuser/{username}")
+    @GetMapping("/api/getuser/{username}")
     public Result getuser(@PathVariable("username") String username){
        return ResultFactory.buildSuccessResult(userService.findByUsername(username));
     }

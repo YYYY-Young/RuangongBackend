@@ -96,13 +96,13 @@ public class UserService {
         return userDAO.save(userInDB);
     }
 
-    public void editUser(User user) {
+    public User editUser(User user) {
         User userInDB = userDAO.findByUsername(user.getUsername());
         userInDB.setUsername(user.getUsername());
         userInDB.setPhone(user.getPhone());
         userInDB.setEmail(user.getEmail());
-        userDAO.save(userInDB);
-        adminUserRoleService.saveRoleChanges(userInDB.getId(), user.getRoles());
+        User re=userDAO.save(userInDB);
+        return re;
     }
     public void deleteById(int id) {
         userDAO.deleteById(id);

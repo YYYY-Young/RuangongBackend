@@ -56,6 +56,7 @@ public class UserTeamService {
         });
         userTeamDAO.saveAll(userTeamList);
     }
+    @Transactional
     public void addOrUpdate(UserTeam userTeam){
         userTeamDAO.save(userTeam);
     }
@@ -66,11 +67,16 @@ public class UserTeamService {
         }
         return userTeam;
     }
-    public void deleteUserTeam(UserTeam userTeam){
-        userTeamDAO.delete(userTeam);
+    @Transactional
+    public void deleteUserTeam(int id){
+        userTeamDAO.deleteById(id);
     }
     public boolean isTeammember(int uid,int tid){
         return userTeamDAO.findByUidAndTid(uid, tid) != null;
+    }
+    public boolean isTeamsys(int uid,int tid){
+        UserTeam userTeam=userTeamDAO.findByUidAndTid(uid,tid);
+        return userTeam != null && userTeam.isIssys();
     }
 
 }

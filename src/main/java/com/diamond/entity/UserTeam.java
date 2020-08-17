@@ -29,4 +29,6 @@ public class UserTeam {
     private int tid;
     @Transient
     private Team team;
+
+    private boolean issys;
 }
