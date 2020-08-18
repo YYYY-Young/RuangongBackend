@@ -20,18 +20,18 @@ public interface UserTeamDAO extends JpaRepository<UserTeam,Integer> {
     List<UserTeam> findAllByUid(int uid);
     List<UserTeam> findAllByTid(int tid);
     UserTeam findById(int  id);
-    @Query(value = "select *from user_team where uid=?1 and isaccept=1",nativeQuery = true)
+    @Query(value = "select *from user_team where uid=?1 and isaccept=1 and isthrown=0 order by time desc",nativeQuery = true)
     List<UserTeam> findacceptedteams(int uid);
-    @Query(value = "select *from user_team where uid=?1 and isaccept=0",nativeQuery = true)
+    @Query(value = "select *from user_team where uid=?1 and isaccept=0 and isthrown=0 order by time desc",nativeQuery = true)
     List<UserTeam> findnotacceptedteams(int uid);
-    @Query(value = "select *from user_team where tid=?1 and isaccept=1",nativeQuery = true)
+    @Query(value = "select *from user_team where tid=?1 and isaccept=1 and isthrown=0 order by time desc",nativeQuery = true)
     List<UserTeam> findacceptedusers(int tid);
-    @Query(value = "select *from user_team where tid=?1 and isaccept=0",nativeQuery = true)
+    @Query(value = "select *from user_team where tid=?1 and isaccept=0 and isthrown=0 order by time desc",nativeQuery = true)
     List<UserTeam> findnotacceptedusers(int tid);
-
-    @Transactional
-    @Modifying
-    void deleteByUidAndTid(int uid,int tid);
+    @Query(value = "select *from user_team where uid =?1 and isaccept=0 and isthrown=1 order by time desc",nativeQuery = true)
+    List<UserTeam> findthrownrecords(int uid);
+    @Query(value = "select *from user_team where uid=?1 and tid=?2 and isaccept=1 and isthrown=0",nativeQuery = true)
+    UserTeam checkifismember(int uid,int tid);
     @Transactional
     @Modifying
     void deleteAllByTid(int tid);

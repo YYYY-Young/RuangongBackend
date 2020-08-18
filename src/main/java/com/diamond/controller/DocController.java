@@ -45,21 +45,6 @@ public class DocController {
         }
     }
 
-    //    @ApiOperation(value = "获取最近阅读的文件", notes = "传入获取人的id", httpMethod = "GET")
-//    @GetMapping("/api/doc/docread/{uid}")
-//    public Result getdocread(@PathVariable("uid") int uid){
-//        return ResultFactory.buildSuccessResult(docService.findbyuidread(uid));
-//    }
-//    @ApiOperation(value = "获取收藏的文件", notes = "传入收藏人的id", httpMethod = "GET")
-//    @GetMapping("/api/doc/doclike/{uid}")
-//    public Result likeDoc(@PathVariable("uid") int uid){
-//        return ResultFactory.buildSuccessResult(docService.findbyuidlike(uid));
-//    }
-//    @ApiOperation(value = "获取被别人分享的文件", notes = "传入收藏人的id", httpMethod = "GET")
-//    @GetMapping("/api/doc/docshare/{uid}")
-//    public Result shareDoc(@PathVariable("uid") int uid){
-//        return ResultFactory.buildSuccessResult(docService.findbyuidlike(uid));
-//    }
     @DeleteMapping("/api/doc/deleteone/{id}/{uid}")
     public Result deleteDoc(@PathVariable("id") int id, @PathVariable("uid") int uid) {
         int re=docService.delete(uid, id);
@@ -128,6 +113,11 @@ public class DocController {
         }else {
             return ResultFactory.buildFailResult("该文档正在被修改");
         }
+    }
+    @GetMapping("/api/doc/changeeditstatus/{docid}")
+    public Result changeditstatus(@PathVariable("docid") int docid){
+        docService.changeisedit(docid);
+        return ResultFactory.buildSuccessResult("成功更改文章编辑状态");
     }
 
 }

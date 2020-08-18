@@ -46,6 +46,7 @@ public class Doc {
     private boolean doc_only_team;
     private boolean doc_read;
     private boolean doc_edit;
+    private boolean doc_isedit;
     private boolean doc_comment;
     private boolean doc_delete;
     private boolean doc_share;

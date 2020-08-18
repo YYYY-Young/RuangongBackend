@@ -32,11 +32,11 @@ public class UserTeamController {
     @Autowired
     TeamService teamService;
     @GetMapping("/api/team/findteams/{uid}")
-    public Result listUsers(@PathVariable("uid") int uid){
+    public Result listTeams(@PathVariable("uid") int uid){
         return ResultFactory.buildSuccessResult(userTeamService.listAllByUid(uid));
     }
     @GetMapping("/api/team/findusers/{tid}")
-    public Result listTeams(@PathVariable("tid")int tid){
+    public Result listUsers(@PathVariable("tid")int tid){
         return ResultFactory.buildSuccessResult(userTeamService.listAllByTid(tid));
     }
     @GetMapping("/api/team/findteamsnotaccepted/{uid}")
@@ -46,6 +46,10 @@ public class UserTeamController {
     @GetMapping("/api/team/findusersnotaccepted/{tid}")
     public Result listTeamsnotaccepted(@PathVariable("tid")int tid){
         return ResultFactory.buildSuccessResult(userTeamService.listAllnotacceptedByTid(tid));
+    }
+    @GetMapping("/api/team/findthrown/{uid}")
+    public Result findthrown(@PathVariable("uid") int uid){
+        return ResultFactory.buildSuccessResult(userTeamService.listAllthrownByUid(uid));
     }
     @GetMapping("/api/team/accept/{id}")
      public Result acceptinvatation(@PathVariable("id") int id){
@@ -78,6 +82,15 @@ public class UserTeamController {
     public Result initteam(@RequestBody @Valid Team team){
         teamService.initTeam(team);
         return ResultFactory.buildSuccessResult("创建成功");
+    }
+    @DeleteMapping("/api/team/delete/{uid}/{tid}")
+    public Result deleteteam(@PathVariable("uid") int uid,@PathVariable("tid") int tid){
+        int re=teamService.deleteTeam(uid,tid);
+        if(re==1){
+            return ResultFactory.buildSuccessResult("成功删除");
+        }else {
+            return ResultFactory.buildFailResult("删除失败");
+        }
     }
 
 }

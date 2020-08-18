@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 /**
  * @Classname UserTeam
@@ -32,4 +33,6 @@ public class UserTeam {
 
     private boolean issys;
     private boolean isaccept;
+    private boolean isthrown;
+    private Timestamp time;
 }

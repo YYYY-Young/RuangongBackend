@@ -60,12 +60,23 @@ public class UserTeamService {
         }
         return userTeamList;
     }
+    public List<UserTeam>listAllthrownByUid(int uid){
+        List<UserTeam> userTeamList=userTeamDAO.findthrownrecords(uid);
+        for(UserTeam userTeam:userTeamList){
+            userTeam.setTeam(teamDAO.findById(userTeam.getTid()));
+            userTeam.setUser(userDAO.findById(userTeam.getUid()));
+        }
+        return userTeamList;
+    }
+
     public int acceptinvatation(int id){
         UserTeam userTeam=userTeamDAO.findById(id);
         if(userTeam==null){
             return 0;
         }
         userTeam.setIsaccept(true);
+        java.sql.Timestamp ctime = new java.sql.Timestamp(new java.util.Date().getTime());
+        userTeam.setTime(ctime);
         userTeamDAO.save(userTeam);
         return 1;
     }
@@ -84,6 +95,8 @@ public class UserTeamService {
     }
     @Transactional
     public void addOrUpdate(UserTeam userTeam){
+        java.sql.Timestamp ctime = new java.sql.Timestamp(new java.util.Date().getTime());
+        userTeam.setTime(ctime);
         userTeamDAO.save(userTeam);
     }
     public UserTeam  findByUidAndTid(int uid,int tid){
@@ -95,10 +108,20 @@ public class UserTeamService {
     }
     @Transactional
     public void deleteUserTeam(int id){
+        UserTeam userTeam=userTeamDAO.findById(id);
+        int uid=userTeam.getUid();
+        int tid=userTeam.getTid();
         userTeamDAO.deleteById(id);
+        UserTeam deleterecord=new UserTeam();
+        deleterecord.setUid(uid);
+        deleterecord.setTid(tid);
+        deleterecord.setIsthrown(true);
+        java.sql.Timestamp ctime = new java.sql.Timestamp(new java.util.Date().getTime());
+        deleterecord.setTime(ctime);
+        userTeamDAO.save(deleterecord);
     }
     public boolean isTeammember(int uid,int tid){
-        return userTeamDAO.findByUidAndTid(uid, tid) != null;
+        return userTeamDAO.checkifismember(uid, tid) != null;
     }
     public boolean isTeamsys(int uid,int tid){
         UserTeam userTeam=userTeamDAO.findByUidAndTid(uid,tid);

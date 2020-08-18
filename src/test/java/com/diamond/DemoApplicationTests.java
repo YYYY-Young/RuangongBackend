@@ -3,6 +3,7 @@ package com.diamond;
 import com.diamond.dao.CommentDAO;
 import com.diamond.dao.DocDAO;
 import com.diamond.dao.UserDocDAO;
+import com.diamond.dao.UserTeamDAO;
 import com.diamond.entity.Doc;
 import com.diamond.entity.Team;
 import com.diamond.entity.User;
@@ -32,9 +33,11 @@ class DemoApplicationTests {
     private UserDocDAO userDocDAO;
     @Autowired
     private CommentDAO commentDAO;
+    @Autowired
+    private UserTeamDAO userTeamDAO;
     @Test
     public void contextLoads() {
-
+        System.out.println(userTeamDAO.findacceptedteams(112));
     }
 
 

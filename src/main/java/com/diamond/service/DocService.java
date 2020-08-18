@@ -205,6 +205,16 @@ public class DocService {
         }
         return 0;
     }
+    public int changeisedit(int docid){
+        Doc doc=docDAO.findById(docid);
+        doc.setDoc_isedit(!doc.isDoc_isedit());
+        docDAO.save(doc);
+        return 1;
+
+
+
+
+    }
 
 
 
