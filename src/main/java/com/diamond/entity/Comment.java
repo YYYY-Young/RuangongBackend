@@ -30,6 +30,8 @@ public class Comment {
     @Transient
     private Doc doc;
     private int uid;
+    @Transient
+    User user;
 
     private String des;
     private Timestamp time;

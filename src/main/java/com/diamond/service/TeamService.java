@@ -30,6 +30,17 @@ public class TeamService {
         teamDAO.save(team);
 
     }
+    @Transactional
+    public Team editTeammsg(Team team){
+        Team teamindb=teamDAO.findById(team.getId());
+        teamindb.setDes(team.getDes());
+        teamindb.setTeamname(team.getTeamname());
+        teamindb=teamDAO.save(teamindb);
+        return teamindb;
+    }
+    public Team getById(int tid){
+        return teamDAO.findById(tid);
+    }
 
     public void initTeam(Team team) {
         editTeam(team);
@@ -37,6 +48,7 @@ public class TeamService {
         userTeam.setUid(team.getLeaderid());
         userTeam.setTid(team.getId());
         userTeam.setIssys(true);
+        userTeam.setIsaccept(true);
         java.sql.Timestamp ctime = new java.sql.Timestamp(new java.util.Date().getTime());
         userTeam.setTime(ctime);
         userTeamDAO.save(userTeam);
@@ -51,6 +63,7 @@ public class TeamService {
         for (UserTeam userTeam : alluserTeams) {
             if (userTeam.getTid() == tid && !userTeam.isIsthrown() && userTeam.isIsaccept()) {
                 userTeam.setIsthrown(true);
+                userTeam.setIsaccept(false);
                 userTeam.setTime(new java.sql.Timestamp(new java.util.Date().getTime()));
                 userTeamDAO.save(userTeam);
             }

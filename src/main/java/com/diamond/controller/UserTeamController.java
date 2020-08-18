@@ -31,66 +31,96 @@ public class UserTeamController {
     DocService docService;
     @Autowired
     TeamService teamService;
+
     @GetMapping("/api/team/findteams/{uid}")
-    public Result listTeams(@PathVariable("uid") int uid){
+    public Result listTeams(@PathVariable("uid") int uid) {
         return ResultFactory.buildSuccessResult(userTeamService.listAllByUid(uid));
     }
+
     @GetMapping("/api/team/findusers/{tid}")
-    public Result listUsers(@PathVariable("tid")int tid){
+    public Result listUsers(@PathVariable("tid") int tid) {
         return ResultFactory.buildSuccessResult(userTeamService.listAllByTid(tid));
     }
+
     @GetMapping("/api/team/findteamsnotaccepted/{uid}")
-    public Result listUsersnotaccepted(@PathVariable("uid") int uid){
+    public Result listUsersnotaccepted(@PathVariable("uid") int uid) {
         return ResultFactory.buildSuccessResult(userTeamService.listAllnotacceptedByUid(uid));
     }
+
     @GetMapping("/api/team/findusersnotaccepted/{tid}")
-    public Result listTeamsnotaccepted(@PathVariable("tid")int tid){
+    public Result listTeamsnotaccepted(@PathVariable("tid") int tid) {
         return ResultFactory.buildSuccessResult(userTeamService.listAllnotacceptedByTid(tid));
     }
+
     @GetMapping("/api/team/findthrown/{uid}")
-    public Result findthrown(@PathVariable("uid") int uid){
+    public Result findthrown(@PathVariable("uid") int uid) {
         return ResultFactory.buildSuccessResult(userTeamService.listAllthrownByUid(uid));
     }
+
     @GetMapping("/api/team/accept/{id}")
-     public Result acceptinvatation(@PathVariable("id") int id){
-        int re=userTeamService.acceptinvatation(id);
-        if(re==1){
+    public Result acceptinvatation(@PathVariable("id") int id) {
+        int re = userTeamService.acceptinvatation(id);
+        if (re == 1) {
             return ResultFactory.buildSuccessResult("成功接受了邀请");
         }
-        if(re==0){
+        if (re == 0) {
             return ResultFactory.buildFailResult("找不到邀请的记录，请刷新");
         }
         return ResultFactory.buildFailResult("未知错误");
     }
+
+    @DeleteMapping("/api/team/deny/{id}")
+    public Result denyinvatation(@PathVariable("id") int id) {
+        userTeamService.deletebyidfast(id);
+        return ResultFactory.buildSuccessResult("删除成功");
+    }
+
     @PutMapping("/api/team/edit")
     public Result addOrUpdateUserTeam(@RequestBody @Valid UserTeam userTeam) {
         userTeamService.addOrUpdate(userTeam);
         return ResultFactory.buildSuccessResult("修改成功");
     }
+
     @PostMapping("api/team/resetmembers")
-    public Result initteammembers(@RequestBody @Valid List<UserTeam> userTeamList){
-        UserTeam userTeam=userTeamList.get(0);
-        userTeamService.initmembers(userTeam.getTid(),userTeamList);
+    public Result initteammembers(@RequestBody @Valid List<UserTeam> userTeamList) {
+        UserTeam userTeam = userTeamList.get(0);
+        userTeamService.initmembers(userTeam.getTid(), userTeamList);
         return ResultFactory.buildSuccessResult("已删除原有记录并批量添加");
     }
-    @DeleteMapping("/api/team/deleteuser/{id}")
-    public Result deleteUser(@PathVariable("id") int id){
-        userTeamService.deleteUserTeam(id);
-        return ResultFactory.buildSuccessResult("删除成功");
+
+    @DeleteMapping("/api/team/deleteuser/{uid}/{id}")
+    public Result deleteUser(@PathVariable("uid") int uid, @PathVariable("id") int id) {
+        int re = userTeamService.deleteUserTeam(uid, id);
+        if (re == 1) {
+            return ResultFactory.buildSuccessResult("删除成功");
+        } else {
+            return ResultFactory.buildFailResult("没有权限");
+        }
     }
+
     @PostMapping("/api/team/initteam")
-    public Result initteam(@RequestBody @Valid Team team){
+    public Result initteam(@RequestBody @Valid Team team) {
         teamService.initTeam(team);
         return ResultFactory.buildSuccessResult("创建成功");
     }
+
     @DeleteMapping("/api/team/delete/{uid}/{tid}")
-    public Result deleteteam(@PathVariable("uid") int uid,@PathVariable("tid") int tid){
-        int re=teamService.deleteTeam(uid,tid);
-        if(re==1){
+    public Result deleteteam(@PathVariable("uid") int uid, @PathVariable("tid") int tid) {
+        int re = teamService.deleteTeam(uid, tid);
+        if (re == 1) {
             return ResultFactory.buildSuccessResult("成功删除");
-        }else {
+        } else {
             return ResultFactory.buildFailResult("删除失败");
         }
+    }
+    @PostMapping("/api/team/editTeammsg")
+    public Result editTeammsg(@RequestBody @Valid Team team){
+        return ResultFactory.buildSuccessResult(teamService.editTeammsg(team));
+    }
+    @GetMapping("/api/team/tid/{tid}")
+    public Result getTeammsg(@PathVariable("tid")int tid){
+        return ResultFactory.buildSuccessResult(teamService.getById(tid));
+
     }
 
 }

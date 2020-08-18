@@ -2,6 +2,7 @@ package com.diamond.service;
 
 import com.diamond.dao.CommentDAO;
 import com.diamond.dao.DocDAO;
+import com.diamond.dao.UserDAO;
 import com.diamond.entity.Comment;
 import com.diamond.entity.Doc;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,13 @@ public class CommentService {
     DocDAO docDAO;
     @Autowired
     UserTeamService userTeamService;
+    @Autowired
+    UserDAO userDAO;
 
     public Comment findById(int id) {
         Comment comment= commentDao.findById(id);
         comment.setDoc(docDAO.findById(comment.getDocid()));
+        comment.setUser(userDAO.findById(comment.getUid()));
         return comment;
     }
     public List<Comment> getCommentbyuid(int uid){
@@ -36,6 +40,7 @@ public class CommentService {
           List<Comment> comments=commentDao.findAllByUidOrderByTimeDesc(uid);
           for(Comment comment:comments){
               comment.setDoc(docDAO.findById(comment.getDocid()));
+              comment.setUser(userDAO.findById(comment.getUid()));
           }
           return comments;
     }
@@ -43,6 +48,7 @@ public class CommentService {
         List<Comment> comments= commentDao.findAllByDocidOrderByTimeDesc(docid);
         for(Comment comment:comments){
             comment.setDoc(docDAO.findById(comment.getDocid()));
+            comment.setUser(userDAO.findById(comment.getUid()));
         }
         return comments;
     }
@@ -51,6 +57,7 @@ public class CommentService {
         List<Comment>re=new ArrayList<>();
         for(Comment comment:comments){
             comment.setDoc(docDAO.findById(comment.getDocid()));
+            comment.setUser(userDAO.findById(comment.getUid()));
             if(comment.getDoc().getDoc_founder()==uid){
                 re.add(comment);
             }
@@ -64,7 +71,7 @@ public class CommentService {
         int tid = doc.getDoc_team();
         java.sql.Timestamp ctime = new java.sql.Timestamp(new java.util.Date().getTime());
         comment.setTime(ctime);
-        if (doc.getDoc_founder() != uid && (!doc.isDoc_comment() || !userTeamService.isTeammember(uid, tid))) {
+        if (doc.getDoc_founder() != uid && (!doc.isDoc_share() || (doc.isDoc_only_team() && !userTeamService.isTeammember(uid, tid)))) {
             return 0;
         }
         commentDao.save(comment);

@@ -107,25 +107,35 @@ public class UserTeamService {
         return userTeam;
     }
     @Transactional
-    public void deleteUserTeam(int id){
+    public int deleteUserTeam(int uid,int id){
         UserTeam userTeam=userTeamDAO.findById(id);
-        int uid=userTeam.getUid();
+        int deleteduid=userTeam.getUid();
         int tid=userTeam.getTid();
+        Team team=teamDAO.findById(tid);
+        int founder=team.getLeaderid();
+        if((!isTeamsys(uid,tid)&&deleteduid!=uid)||(deleteduid==founder&&uid!=founder)){
+            return 0;
+        }
         userTeamDAO.deleteById(id);
         UserTeam deleterecord=new UserTeam();
-        deleterecord.setUid(uid);
+        deleterecord.setUid(deleteduid);
         deleterecord.setTid(tid);
         deleterecord.setIsthrown(true);
         java.sql.Timestamp ctime = new java.sql.Timestamp(new java.util.Date().getTime());
         deleterecord.setTime(ctime);
         userTeamDAO.save(deleterecord);
+        return 1;
     }
     public boolean isTeammember(int uid,int tid){
         return userTeamDAO.checkifismember(uid, tid) != null;
     }
     public boolean isTeamsys(int uid,int tid){
-        UserTeam userTeam=userTeamDAO.findByUidAndTid(uid,tid);
+        UserTeam userTeam=userTeamDAO.checkifismember(uid,tid);
         return userTeam != null && userTeam.isIssys();
+    }
+    @Transactional
+    public void deletebyidfast(int id){
+        userTeamDAO.deleteById(id);
     }
 
 }

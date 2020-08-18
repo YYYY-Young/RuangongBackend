@@ -37,7 +37,7 @@ class DemoApplicationTests {
     private UserTeamDAO userTeamDAO;
     @Test
     public void contextLoads() {
-        System.out.println(userTeamDAO.findacceptedteams(112));
+        System.out.println( userTeamService.deleteUserTeam(1,12));
     }
 
 
