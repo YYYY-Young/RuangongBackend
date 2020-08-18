@@ -23,6 +23,8 @@ public interface DocDAO extends JpaRepository<Doc,Integer> {
     Doc findnotdeletedocs(int id);
     @Query(value = "select * from doc where id=?1 and doc_recycle=1 ",nativeQuery=true )
     Doc findalreadydeletedocs(int id);
+    @Query(value = "select * from doc where id=?1 and doc_isedit=0",nativeQuery = true)
+    Doc findifedit(int id);
     @Query(value = "select * from doc where doc_only_team=1 and doc_team=?1 and doc_recycle=0 ",nativeQuery=true )
     List<Doc> teamdocs(int tid);
     @Modifying

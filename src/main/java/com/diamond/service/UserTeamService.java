@@ -28,7 +28,7 @@ public class UserTeamService {
     @Autowired
     UserDAO userDAO;
     public List<UserTeam> listAllByTid(int tid){
-        List<UserTeam> userTeamList= userTeamDAO.findAllByTid(tid);
+        List<UserTeam> userTeamList= userTeamDAO.findacceptedusers(tid);
         for(UserTeam userTeam:userTeamList){
             userTeam.setTeam(teamDAO.findById(userTeam.getTid()));
             userTeam.setUser(userDAO.findById(userTeam.getUid()));
@@ -37,13 +37,39 @@ public class UserTeamService {
     }
     public List<UserTeam> listAllByUid(int uid){
 
-        List<UserTeam> userTeamList= userTeamDAO.findAllByUid(uid);
+        List<UserTeam> userTeamList= userTeamDAO.findacceptedteams(uid);
         for(UserTeam userTeam:userTeamList){
             userTeam.setTeam(teamDAO.findById(userTeam.getTid()));
             userTeam.setUser(userDAO.findById(userTeam.getUid()));
         }
         return userTeamList;
     }
+    public List<UserTeam>listAllnotacceptedByTid(int tid){
+        List<UserTeam> userTeamList=userTeamDAO.findnotacceptedusers(tid);
+        for(UserTeam userTeam:userTeamList){
+            userTeam.setTeam(teamDAO.findById(userTeam.getTid()));
+            userTeam.setUser(userDAO.findById(userTeam.getUid()));
+        }
+        return userTeamList;
+    }
+    public List<UserTeam>listAllnotacceptedByUid(int uid){
+        List<UserTeam> userTeamList=userTeamDAO.findnotacceptedteams(uid);
+        for(UserTeam userTeam:userTeamList){
+            userTeam.setTeam(teamDAO.findById(userTeam.getTid()));
+            userTeam.setUser(userDAO.findById(userTeam.getUid()));
+        }
+        return userTeamList;
+    }
+    public int acceptinvatation(int id){
+        UserTeam userTeam=userTeamDAO.findById(id);
+        if(userTeam==null){
+            return 0;
+        }
+        userTeam.setIsaccept(true);
+        userTeamDAO.save(userTeam);
+        return 1;
+    }
+
     @Transactional
     public void initmembers(int tid,List<UserTeam> users){
         userTeamDAO.deleteAllByTid(tid);

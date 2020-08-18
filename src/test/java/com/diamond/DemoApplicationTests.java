@@ -34,7 +34,7 @@ class DemoApplicationTests {
     private CommentDAO commentDAO;
     @Test
     public void contextLoads() {
-        System.out.println(docService.finddocsbycontent(1,"ha"));
+
     }
 
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,6 +45,17 @@ public class CommentService {
             comment.setDoc(docDAO.findById(comment.getDocid()));
         }
         return comments;
+    }
+    public List<Comment> getallcommentsbyothers(int uid){
+        List<Comment>comments=commentDao.findAll();
+        List<Comment>re=new ArrayList<>();
+        for(Comment comment:comments){
+            comment.setDoc(docDAO.findById(comment.getDocid()));
+            if(comment.getDoc().getDoc_founder()==uid){
+                re.add(comment);
+            }
+        }
+        return re;
     }
 
     public int addOrUpdate(Comment comment) {

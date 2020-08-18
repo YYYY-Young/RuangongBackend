@@ -39,6 +39,25 @@ public class UserTeamController {
     public Result listTeams(@PathVariable("tid")int tid){
         return ResultFactory.buildSuccessResult(userTeamService.listAllByTid(tid));
     }
+    @GetMapping("/api/team/findteamsnotaccepted/{uid}")
+    public Result listUsersnotaccepted(@PathVariable("uid") int uid){
+        return ResultFactory.buildSuccessResult(userTeamService.listAllnotacceptedByUid(uid));
+    }
+    @GetMapping("/api/team/findusersnotaccepted/{tid}")
+    public Result listTeamsnotaccepted(@PathVariable("tid")int tid){
+        return ResultFactory.buildSuccessResult(userTeamService.listAllnotacceptedByTid(tid));
+    }
+    @GetMapping("/api/team/accept/{id}")
+     public Result acceptinvatation(@PathVariable("id") int id){
+        int re=userTeamService.acceptinvatation(id);
+        if(re==1){
+            return ResultFactory.buildSuccessResult("成功接受了邀请");
+        }
+        if(re==0){
+            return ResultFactory.buildFailResult("找不到邀请的记录，请刷新");
+        }
+        return ResultFactory.buildFailResult("未知错误");
+    }
     @PutMapping("/api/team/edit")
     public Result addOrUpdateUserTeam(@RequestBody @Valid UserTeam userTeam) {
         userTeamService.addOrUpdate(userTeam);

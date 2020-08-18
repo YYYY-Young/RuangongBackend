@@ -198,6 +198,13 @@ public class DocService {
         }
         return re;
     }
+    public int ifisbeeneditting(int id){
+        Doc doc=docDAO.findifedit(id);
+        if(doc!=null){
+            return 1;
+        }
+        return 0;
+    }
 
 
 

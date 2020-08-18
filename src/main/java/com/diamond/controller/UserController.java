@@ -3,6 +3,7 @@ package com.diamond.controller;
 import com.diamond.entity.User;
 import com.diamond.result.Result;
 import com.diamond.result.ResultFactory;
+import com.diamond.service.EmailService;
 import com.diamond.service.UserService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ import javax.validation.Valid;
 public class UserController {
     @Autowired
     UserService userService;
+    @Autowired
+    EmailService emailService;
     @GetMapping("/api/user")
     public Result listUsers() {
         return ResultFactory.buildSuccessResult(userService.userList());
@@ -40,12 +43,21 @@ public class UserController {
 
     @PutMapping("/api/user")
     public Result editUser(@RequestBody @Valid User requestUser) {
-        userService.editUser(requestUser);
-        return ResultFactory.buildSuccessResult("修改用户信息成功");
+        return ResultFactory.buildSuccessResult(userService.editUser(requestUser));
+    }
+    @PutMapping("api/user/emailchange")
+    public Result editemail(@RequestBody @Valid User user){
+        return ResultFactory.buildSuccessResult(userService.editemail(user));
+
     }
     @GetMapping("/api/getuser/{username}")
     public Result getuser(@PathVariable("username") String username){
        return ResultFactory.buildSuccessResult(userService.findByUsername(username));
+    }
+    @GetMapping("/api/sendemail/{email}")
+    public Result sendemail(@PathVariable("email") String email){
+        emailService.sendMsg(email);
+        return ResultFactory.buildSuccessResult("发送成功");
     }
 
 }

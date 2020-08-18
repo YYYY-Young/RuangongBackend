@@ -55,6 +55,10 @@ public class CommentController {
     public Result getCommentbydoc(@PathVariable("docid")int docid){
         return ResultFactory.buildSuccessResult(commentService.getCommentbydocid(docid));
     }
+    @GetMapping("/api/commment/getcommentbyothers/{uid}")
+    public Result getCommentbyothers(@PathVariable ("uid") int uid){
+        return ResultFactory.buildSuccessResult(commentService.getallcommentsbyothers(uid));
+    }
 
 
 }

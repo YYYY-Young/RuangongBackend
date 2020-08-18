@@ -31,4 +31,5 @@ public class UserTeam {
     private Team team;
 
     private boolean issys;
+    private boolean isaccept;
 }

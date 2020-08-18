@@ -81,6 +81,7 @@ public class UserDocService {
                 continue;
             }
             userDoc.setDoc(docDAO.findById(userDoc.getDocid()));
+            userDoc.setDoc_share_user(userDAO.findById(userDoc.getDoc_share_uid()));
         }
         return userDocs;
     }

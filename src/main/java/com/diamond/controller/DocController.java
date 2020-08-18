@@ -25,10 +25,11 @@ public class DocController {
 
     @PostMapping("/api/doc/save")
     public Result saveDoc(@RequestBody @Valid Doc doc) {
-        if (docService.addOrUpdate(doc) == 1) {
+        int re=docService.addOrUpdate(doc);
+        if (re == 1) {
             return ResultFactory.buildSuccessResult("保存成功");
         }
-        if (docService.addOrUpdate(doc) != 1) {
+        if (re == 0) {
             return ResultFactory.buildFailResult("没有权限进行文章修改保存");
         }
         return ResultFactory.buildFailResult("未知错误");
@@ -78,10 +79,11 @@ public class DocController {
     @GetMapping("/api/doc/share/{fromuid}/{touid}/{msg}/{docid}")
     public Result shareDoc(@PathVariable("fromuid") int fromuid, @PathVariable("touid") int touid,
                            @PathVariable("msg") String msg, @PathVariable("docid") int docid) {
-        if (docService.share(fromuid, touid, docid, msg) == 1) {
+        int re=docService.share(fromuid, touid, docid, msg);
+        if (re == 1) {
             return ResultFactory.buildSuccessResult("分享成功");
         }
-        if (docService.share(fromuid, touid, docid, msg) == 0) {
+        if (re== 0) {
             return ResultFactory.buildFailResult("没有分享权限，分享失败");
         }
         return ResultFactory.buildFailResult("未知错误");
@@ -117,6 +119,15 @@ public class DocController {
     @GetMapping("/api/doc/search/content/{uid}/{keyword}")
     public Result finddocsbycontent(@PathVariable("uid") int uid,@PathVariable("keyword") String keyword){
         return ResultFactory.buildSuccessResult(docService.finddocsbycontent(uid,keyword));
+    }
+    @GetMapping("/api/doc/ifedit/{docid}")
+    public Result ifedit(@PathVariable("docid")int docid){
+        int re=docService.ifisbeeneditting(docid);
+        if(re==1){
+            return ResultFactory.buildSuccessResult("能进行修改");
+        }else {
+            return ResultFactory.buildFailResult("该文档正在被修改");
+        }
     }
 
 }

@@ -19,8 +19,16 @@ import java.util.List;
 public interface UserTeamDAO extends JpaRepository<UserTeam,Integer> {
     List<UserTeam> findAllByUid(int uid);
     List<UserTeam> findAllByTid(int tid);
-//    @Modifying
-//    @Query("delete from Customer where id = ?1")
+    UserTeam findById(int  id);
+    @Query(value = "select *from user_team where uid=?1 and isaccept=1",nativeQuery = true)
+    List<UserTeam> findacceptedteams(int uid);
+    @Query(value = "select *from user_team where uid=?1 and isaccept=0",nativeQuery = true)
+    List<UserTeam> findnotacceptedteams(int uid);
+    @Query(value = "select *from user_team where tid=?1 and isaccept=1",nativeQuery = true)
+    List<UserTeam> findacceptedusers(int tid);
+    @Query(value = "select *from user_team where tid=?1 and isaccept=0",nativeQuery = true)
+    List<UserTeam> findnotacceptedusers(int tid);
+
     @Transactional
     @Modifying
     void deleteByUidAndTid(int uid,int tid);

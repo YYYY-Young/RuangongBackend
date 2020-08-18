@@ -24,6 +24,8 @@ public class UserService {
     AdminRoleService adminRoleService;
     @Autowired
     AdminUserRoleService adminUserRoleService;
+    @Autowired
+    EmailService emailService;
     public boolean isExist(String username) {
         User user = userDAO.findByUsername(username);
         return null != user;
@@ -57,7 +59,7 @@ public class UserService {
         user.setEnabled(true);
         code=HtmlUtils.htmlEscape(code);
         user.setCode(code);
-        if(!code.equals("100000")&&!code.equals("200000")){
+        if(!code.equals(emailService.getPermitcodes(user.getEmail()))){
             return 3;
         }
 
@@ -88,6 +90,11 @@ public class UserService {
 
     public User resetPassword(User user) {
         User userInDB = userDAO.findByUsername(user.getUsername());
+        String email=user.getEmail();
+        String code=user.getCode();
+        if(!code.equals(emailService.getPermitcodes(email))){
+            return userInDB;
+        }
         String salt = new SecureRandomNumberGenerator().nextBytes().toString();
         int times = 2;
         userInDB.setSalt(salt);
@@ -100,9 +107,23 @@ public class UserService {
         User userInDB = userDAO.findByUsername(user.getUsername());
         userInDB.setUsername(user.getUsername());
         userInDB.setPhone(user.getPhone());
-        userInDB.setEmail(user.getEmail());
         User re=userDAO.save(userInDB);
         return re;
+    }
+    public User editemail(User user){
+        User userinDB=userDAO.findByUsername(user.getUsername());
+        String email=user.getEmail();
+        if(email.equals(userinDB.getEmail())){
+            return userinDB;
+        }
+        String code=user.getCode();
+        if(!code.equals(emailService.getPermitcodes(userinDB.getEmail()))){
+            return userinDB;
+        }
+        userinDB.setEmail(user.getEmail());
+        User re=userDAO.save(userinDB);
+        return re;
+
     }
     public void deleteById(int id) {
         userDAO.deleteById(id);
