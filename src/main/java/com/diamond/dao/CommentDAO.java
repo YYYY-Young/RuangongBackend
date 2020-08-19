@@ -2,6 +2,8 @@ package com.diamond.dao;
 
 import com.diamond.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,4 +20,7 @@ public interface CommentDAO extends JpaRepository<Comment,Integer> {
     void deleteByUidAndDocid(int uid,int docid);
     void deleteById(int id);
     Comment findById(int id);
+    @Transactional
+    @Modifying
+    void deleteAllByDocid(int docid);
 }

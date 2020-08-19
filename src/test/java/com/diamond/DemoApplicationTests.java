@@ -37,7 +37,7 @@ class DemoApplicationTests {
     private UserTeamDAO userTeamDAO;
     @Test
     public void contextLoads() {
-        System.out.println( userTeamService.deleteUserTeam(1,12));
+        commentDAO.deleteAllByDocid(9);
     }
 
 

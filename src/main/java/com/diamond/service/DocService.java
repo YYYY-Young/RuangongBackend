@@ -1,5 +1,6 @@
 package com.diamond.service;
 
+import com.diamond.dao.CommentDAO;
 import com.diamond.dao.DocDAO;
 import com.diamond.dao.UserDAO;
 import com.diamond.dao.UserDocDAO;
@@ -32,6 +33,8 @@ public class DocService {
     UserDocService userDocService;
     @Autowired
     UserDAO userDAO;
+    @Autowired
+    CommentDAO commentDAO;
 
     public Doc findById(int uid, int id) {
         Doc doc;
@@ -94,6 +97,8 @@ public class DocService {
         } else {
             docDAO.deleteById(id);
             userDocDAO.deleteAllByDocid(id);
+            commentDAO.deleteAllByDocid(id);
+
         }
         return 2;
     }

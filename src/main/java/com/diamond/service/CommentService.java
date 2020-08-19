@@ -71,7 +71,7 @@ public class CommentService {
         int tid = doc.getDoc_team();
         java.sql.Timestamp ctime = new java.sql.Timestamp(new java.util.Date().getTime());
         comment.setTime(ctime);
-        if (doc.getDoc_founder() != uid && (!doc.isDoc_share() || (doc.isDoc_only_team() && !userTeamService.isTeammember(uid, tid)))) {
+        if (doc.getDoc_founder() != uid && (!doc.isDoc_comment() || (doc.isDoc_only_team() && !userTeamService.isTeammember(uid, tid)))) {
             return 0;
         }
         commentDao.save(comment);
